@@ -18,3 +18,13 @@ The idea behind this flow is to absolutely minimize the changes to the employee'
 * The employer can instantly shut off the employee's access to the account at any time;
 * The employer can restrict the employee to certain kinds of transactions, interactions with specific contracts, only during specific hours of the day, etc.
 * Many employees can share access to funds while maintaining traceability of who made what transaction
+
+## What we are building:
+There are two components we are building:
+* The faux-wallet middleware thing that interacts with WalletConnect/Metamask and forwards transactions to the server for signing
+* The server, which manages the private key and signs transactions for the employees.
+
+## Opportunities for integration:
+* We need a way of authenticating the employee for these signatures. This could be done as outlined above, but perhaps with Worldcoin ID, Sismo, Polygon ID or something similar?
+* We need a way to later monitor this activity on chain retrospectively for the employer. This could be done by logging transactions on the server, but perhaps it can be done in a stateless way using The Graph?
+* Rather than just having one server sign with one key, we could have multiple servers run by multiple organizations or stakeholders, and then use multisig (e.g. through Gnosis) to control shared funds or make transactions that all the stakeholders care about.
