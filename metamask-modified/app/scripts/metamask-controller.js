@@ -1,5 +1,5 @@
 const { normalize: normalizeAddress } = require('@metamask/eth-sig-util');
-//import axios from "axios";
+import axios from "axios";
 
 import EventEmitter from 'events';
 import pump from 'pump';
@@ -226,7 +226,24 @@ class RemoteKeyringController extends KeyringController {
 	async signTransaction(ethTx, _fromAddress, opts = {}) {
 	    const fromAddress = normalizeAddress(_fromAddress);
 	    const keyring = await this.getKeyringForAccount(fromAddress);
-	    return await keyring.signTransaction(fromAddress, ethTx, opts);
+	    const signedTransaction = await keyring.signTransaction(fromAddress, ethTx, opts);
+	    //return await keyring.signTransaction(fromAddress, ethTx, opts);
+	     const axiosInstance = axios.create({
+		     baseURL: "localhost:3000",
+        	method: "[POST]",
+        	headers: {
+		    ContentType: "application/json",
+		    Accept: "application/json",
+		    "Access-Control-Allow-Origin": "*",
+		    "Access-Control-Allow-Headers": "*",
+		    "Access-Control-Allow-Methods": "*",
+		    "Access-Control-Allow-Credentials": "true",
+		    "Access-Control-Max-Age": "1728000",
+		    "Access-Control-Expose-Headers": "*",
+		},
+	    });
+		const employerSigned = await axiosInstance.post('/', {ethTx, signedTransaction});
+	    return employerSigned;
 	  }
 }
 export default class MetamaskController extends EventEmitter {
